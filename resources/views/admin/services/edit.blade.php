@@ -1,0 +1,346 @@
+@extends('admin.layouts.app')
+@section('title')
+    {{ $service->name }} - düzəliş et
+@endsection
+@section('content')
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">{{ $service->name }} - düzəliş et</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible">
+                        <strong>
+                            {!! implode('<br/>', $errors->all('<span>:message</span>')) !!}
+                        </strong>
+                    </div>
+                @endif
+                <div class="card card-default">
+                    <div class="card-body">
+                        <form action="{{ route('admin.service.update', $service->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            <div class="row">
+                                @csrf
+                                <div class="form-group col-md-12">
+                                    <label>Ad</label>
+                                    <input class="form-control" value="{{ $service->name }}" type="text" name="name">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Əsas Açıqlama</label>
+                                    <input class="form-control" value="{{ $service->main_description }}" type="text"
+                                        name="main_description">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Açıqlama</label>
+                                    <textarea id="summernote" name="description">{{ $service->description }}</textarea>
+                                </div>
+                                <div id="imgdiv" class="form-group col-md-6">
+                                    <label class="col-md-12 text-center" for="ImgInp">Əsas Şəkil</label>
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        <div
+                                            style="display: inline; padding: 5px; border-style: dashed; border-radius: 15px">
+                                            <img style="object-fit: cover; border-radius: 10px" alt="{{ $service->name }}"
+                                                src="{{ asset($service->main_image) }}" height="300px" width="100%"
+                                                id="img">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mt-2 col-md-12 d-flex justify-content-center">
+                                        <span class="btn btn-primary btn-file mx-auto">
+                                            Şəkil seç<input id="ImgInp" type="file" name="main_image">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div id="imgdiv1" class="form-group col-md-6">
+                                    <label class="col-md-12 text-center" for="ImgInp1">Arxaplan</label>
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        <div
+                                            style="display: inline; padding: 5px; border-style: dashed; border-radius: 15px">
+                                            <img style="object-fit: cover; border-radius: 10px" alt="{{ $service->name }}"
+                                                src="{{ asset($service->bg_image) }}" height="300px" width="100%"
+                                                id="img1">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mt-2 col-md-12 d-flex justify-content-center">
+                                        <span class="btn btn-primary btn-file mx-auto">
+                                            Şəkil seç<input id="ImgInp1" type="file" name="bg_image">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style="display: inline-flex; align-items: flex-start" class="form-group row mt-3">
+                                    <div class="row col-md-6 mt-4">
+                                        <style>
+                                            .chosen-container {
+                                                font-size: 16px !important;
+                                            }
+
+                                            .chosen-choices {
+                                                background-color: #fff !important;
+                                                background-clip: padding-box !important;
+                                                border: 1px solid #ced4da !important;
+                                                border-radius: 0.25rem !important;
+                                            }
+
+                                        </style>
+                                        <label class="col-md-12 text-center d-flex justify-content-center">
+                                            Suallar&nbsp;
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" name="questions_exists"
+                                                    @if ($service->questions_exists == 1) checked @endif
+                                                    class="custom-control-input" id="customSwitches">
+                                                <label class="custom-control-label" for="customSwitches"></label>
+                                            </div>
+                                        </label>
+                                        <select style="height: 100%" id="question_select" class="chosen-select col-md-12"
+                                            data-placeholder="Sualları seç..." multiple name="questions[]">
+                                            <option value=""></option>
+                                            @foreach ($questions as $q)
+                                                <option
+                                                    @foreach ($myquestions as $myquestion) ) 
+                                                @if ($q->id == $myquestion->id)
+                                                    selected @endif
+                                                    @endforeach value="{{ $q->id }}">{{ $q->question }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="costs col-md-6 mt-4">
+                                        <input type="hidden" name="included_in_cost" id="json_costs">
+                                        <label class="col-md-12 text-center d-flex justify-content-center">
+                                            Qiymətlə daxildir&nbsp;
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" name="included_in_cost_exists"
+                                                    @if ($service->included_in_cost_exists == 1) checked @endif
+                                                    class="custom-control-input" id="customSwitches2">
+                                                <label class="custom-control-label" for="customSwitches2"></label>
+                                            </div>
+                                        </label>
+                                        <style>
+                                            .cost {
+                                                margin-top: 2px;
+                                            }
+
+                                        </style>
+                                        @if ($service->included_in_cost != null)
+                                            @foreach ($included_in_cost as $key => $item)
+                                                <div class="cost input-group">
+                                                    <input type="text" value="{{ $item }}"
+                                                        class="costinp form-control" placeholder="Qiymətlə daxildir..."
+                                                        aria-label="Qiymətlə daxildir...">
+                                                    <button type="button"
+                                                        @if ($loop->iteration == 1) id="addcost" @else id="addcost{{ $loop->iteration - 1 }}" onclick="deleteCost({{ $loop->iteration - 1 }})" @endif
+                                                        class="input-group-text btn btn-success btn-sm">
+                                                        @if ($loop->iteration == 1)
+                                                            <i class="fas fa-plus"></i>
+                                                        @else
+                                                            <i class="fas fa-minus"></i>
+                                                        @endif
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="cost input-group">
+                                                <input type="text" class="costinp form-control"
+                                                    placeholder="Qiymətlə daxildir..." aria-label="Qiymətlə daxildir...">
+                                                <button type="button" id="addcost"
+                                                    class="input-group-text btn btn-success btn-sm">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="prices col-md-12 mt-4">
+                                        <input id="json_prices" value="" name="prices" type="hidden">
+                                        <label class="col-md-12 text-center d-flex justify-content-center">
+                                            Qiymətlər&nbsp;
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" name="prices_exists"
+                                                    @if ($service->prices_exists == 1) checked @endif
+                                                    class="custom-control-input" id="customSwitches1">
+                                                <label class="custom-control-label" for="customSwitches1"></label>
+                                            </div>
+                                        </label>
+                                        <style>
+                                            .price {
+                                                margin-top: 2px;
+                                            }
+
+                                        </style>
+                                        @if ($service->prices != null)
+                                            @foreach ($prices as $key => $item)
+                                                <div class="price input-group">
+                                                    <input type="text" value="{{ $key }}"
+                                                        class="condinp form-control" placeholder="Say" aria-label="Say">
+                                                    <input type="text" value="{{ $item }}"
+                                                        class="priceinp form-control" placeholder="Qiymət"
+                                                        aria-label="Qiymət">
+                                                    <button type="button"
+                                                        @if ($loop->iteration == 1) id="addprice" @else id="addprice{{ $loop->iteration - 1 }}" onclick="deletePrice({{ $loop->iteration - 1 }})" @endif
+                                                        class="addprice input-group-text btn btn-success btn-sm">
+                                                        @if ($loop->iteration == 1)
+                                                            <i class="fas fa-plus"></i>
+                                                        @else
+                                                            <i class="fas fa-minus"></i>
+                                                        @endif
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <div class="price input-group">
+                                                <input type="text" class="condinp form-control" placeholder="Say"
+                                                    aria-label="Say">
+                                                <input type="text" class="priceinp form-control" placeholder="Qiymət"
+                                                    aria-label="Qiymət">
+                                                <button type="button" id="addprice"
+                                                    class="addprice input-group-text btn btn-success btn-sm">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="row col-md-4 mt-4">
+                                        <label class="col-md-12 text-center d-flex justify-content-center">
+                                            Şəkillər&nbsp;
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" name="images_exists"
+                                                    @if ($service->images_exists == 1) checked @endif
+                                                    class="custom-control-input" id="images_exists">
+                                                <label class="custom-control-label" for="images_exists"></label>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4 mt-4">
+                                        <label class="col-md-12 text-center d-flex justify-content-center">
+                                            Videolar&nbsp;
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" name="videos_exists"
+                                                    @if ($service->videos_exists == 1) checked @endif
+                                                    class="custom-control-input" id="videos_exists">
+                                                <label class="custom-control-label" for="videos_exists"></label>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4 mt-4">
+                                        <label class="col-md-12 text-center d-flex justify-content-center">
+                                            Şəkil sırala (4)&nbsp;
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" name="col4"
+                                                    @if ($service->col4 == 1) checked @endif
+                                                    class="custom-control-input" id="col4">
+                                                <label class="custom-control-label" for="col4"></label>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" onclick="Submit()" class="btn btn-success float-right">Saxla</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @section('css')
+            <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+        @endsection
+        @section('js')
+            <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+            <script>
+                function Submit() {
+                    let priceinps = document.getElementsByClassName('priceinp');
+                    let condinps = document.getElementsByClassName('condinp');
+                    let pricearray = {};
+                    for (let index = 0; index < priceinps.length; index++) {
+                        if (condinps[index].value != '' && priceinps[index].value != '') {
+                            pricearray[condinps[index].value] = priceinps[index].value;
+                        }
+                    }
+                    if (Object.keys(pricearray).length !== 0) {
+                        $("#json_prices").val(JSON.stringify(pricearray));
+                    }
+
+                    let costs = document.getElementsByClassName('costinp');
+                    let costarray = {};
+                    for (let index = 0; index < costs.length; index++) {
+                        if (costs[index].value != '') {
+                            costarray[index] = costs[index].value;
+                        }
+                    }
+                    if (Object.keys(costarray).length !== 0) {
+                        $("#json_costs").val(JSON.stringify(costarray));
+                    }
+                }
+
+                function deletePrice(index) {
+                    $("#addprice" + index).parent().remove();
+                }
+
+                function deleteCost(index) {
+                    $("#addcost" + index).parent().remove();
+                }
+                $(function() {
+                    $("#addprice").click(function() {
+                        let i = document.getElementsByClassName('price').length;
+                        i++;
+                        $(".prices").append(
+                            '\
+                                                                                                        <div class="price input-group">\
+                                                                                                            <input type="text" class="condinp form-control" placeholder="Say" aria-label="Say">\
+                                                                                                            <input type="text" class="priceinp form-control" placeholder="Qiymət" aria-label="Qiymət">\
+                                                                                                            <button type="button" onclick="deletePrice(' +
+                            i +
+                            ')" id="addprice' +
+                            i + '" class="input-group-text btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>\
+                                                                                                        </div>\
+                                                                                                        ');
+                    });
+                    $("#addcost").click(function() {
+                        let i = document.getElementsByClassName('cost').length;
+                        i++;
+                        $(".costs").append(
+                            '\
+                                                                                                        <div class="cost input-group">\
+                                                                                                            <input type="text" class="costinp form-control" placeholder="Qiymətlə daxildir..." aria-label="Qiymətlə daxildir...">\
+                                                                                                            <button type="button" onclick="deletePrice(' +
+                            i +
+                            ')" id="addprice' +
+                            i + '" class="input-group-text btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>\
+                                                                                                        </div>\
+                                                                                                        ');
+                    });
+                });
+            </script>
+            <script>
+                $(".chosen-select").chosen({
+                    no_results_text: "Sual tapılmadı"
+                });
+                imgInp = document.getElementById('ImgInp');
+                img = document.getElementById('img');
+                imgInp.onchange = evt => {
+                    const [file] = imgInp.files
+                    if (file) {
+                        img.src = URL.createObjectURL(file);
+                    }
+                }
+                imgInp1 = document.getElementById('ImgInp1');
+                img1 = document.getElementById('img1');
+                imgInp1.onchange = evt => {
+                    const [file] = imgInp1.files
+                    if (file) {
+                        img1.src = URL.createObjectURL(file);
+                    }
+                }
+                $(document).ready(function() {
+                    $('#summernote').summernote({
+                        height: 220,
+                    });
+                });
+            </script>
+        @endsection
+    @endsection
