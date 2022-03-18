@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    {{ $model->name }}
+@endsection
 @section('content')
     <div id="rec171517134" class="r t-rec t-rec_pt_135 t-rec_pb_45" style="padding-top:135px;padding-bottom:45px;"
         data-animationappear="off" data-record-type="814">
@@ -60,7 +63,6 @@
                         img.divid = index;
                         img.onload = function() {
                             let imgdiv = document.getElementById(this.divid);
-                            console.log(imgdiv.offsetWidth);
                             height = this.height * imgdiv.offsetWidth / this.width;
                             imgdiv.style.height = height + 'px';
                         };
@@ -70,7 +72,8 @@
                     <script>
                         getMeta('{{ asset($image->image) }}', 'slide-image{{ $loop->iteration }}');
                     </script>
-                    <div class="t552__tile t552__tile_33" itemscope itemtype="http://schema.org/ImageObject">
+                    <div class="t552__tile @if ($model->col4) t552__tile_25 @else t552__tile_33 @endif"
+                        itemscope itemtype="http://schema.org/ImageObject">
                         <div id="slide-image{{ $loop->iteration }}" class="mimgdiv t552__blockimg_animated"
                             data-zoom-target="{{ $loop->iteration }}" data-zoomable="yes"
                             data-img-zoom-url="{{ asset($image->image) }}"
@@ -90,18 +93,18 @@
                 t552_init('87760438', '1.33');
             });
         </script>
-        <script>
-            $(document).ready(function() {
-                let maxheight = 0;
-                $('.mimgdiv').each(function(index) {
-                    if ($(this).height() > maxheight) {
-                        maxheight = $(this).height();
-                    }
-                });
-                $('.mimgdiv').each(function(index) {
-                    $(this).height(maxheight);
-                });
-            });
-        </script>
     </div>
+@section('js')
+    <script>
+        let maxheight = 0;
+        $('.mimgdiv').each(function(index) {
+            if ($(this).height() > maxheight) {
+                maxheight = $(this).height();
+            }
+        });
+        $('.mimgdiv').each(function(index) {
+            $(this).height(maxheight);
+        });
+    </script>
+@endsection
 @endsection

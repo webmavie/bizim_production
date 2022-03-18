@@ -481,6 +481,7 @@ class AdminController extends Controller {
         $model = WModel::findOrFail($request->id);
         $model->name = $request->name;
         $model->slug = Str::slug($request->name);
+        $model->col4 = $request->has('col4');
         if($request->hasFile('main_image')){
             if (file_exists($model->main_image)) {
                 unlink($model->main_image);
@@ -517,6 +518,7 @@ class AdminController extends Controller {
         $model = new WModel;
         $model->name = $request->name;
         $model->slug = Str::slug($request->name);
+        $model->col4 = $request->has('col4');
         if($request->hasFile('main_image')){
             $image_name = time().'.'.$request->main_image->getClientOriginalName();
             $request->main_image->move(public_path('images/models/'), $image_name);

@@ -6,7 +6,9 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="{{ $setting->site_description }}">
+    <meta property="title" content="{{ $setting->title }}" />
     <meta name=”robots” content="index, follow">
     <meta property="og:title" content="{{ $setting->title }}" />
     <meta property="og:description" content="{{ $setting->site_description }}" />
@@ -43,7 +45,8 @@
     </noscript>
     <link rel="stylesheet" href="{{ asset('front/css/tilda-forms-1.0.min.css') }}" type="text/css" media="all" />
     <link rel="stylesheet" href="{{ asset('front/css/tilda-cover-1.0.min.css') }}" type="text/css" media="all" />
-
+    <link rel="stylesheet" href="{{ asset('front/dist/iziToast.min.css') }}">
+    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <script src="{{ asset('front/js/jquery-1.10.2.min.js') }}"></script>
     <script src="{{ asset('front/js/tilda-scripts-3.0.min.js') }}"></script>
     <script src="{{ asset('front/js/tilda-blocks-2.76ca7.js?t=1642078853') }}"></script>
@@ -56,8 +59,8 @@
     <script src="{{ asset('front/js/hammer.min.js') }}" charset="utf-8" async></script>
     <script src="{{ asset('front/js/tilda-zoom-2.0.min.js') }}" charset="utf-8" async></script>
     <script src="{{ asset('front/js/tilda-forms-1.0.min.js') }}" charset="utf-8" async></script>
-    <link rel="alternate" hreflang="ru" href="../index.html" />
-    <link rel="alternate" hreflang="uk" href="index.html" />
+    <script src="{{ asset('front/dist/iziToast.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('front/dist/econtrol.js') }}" type="text/javascript"></script>
 </head>
 
 <body class="t-body" style="margin: 0px; position: relative; min-height: 100%; top: 40px;">
@@ -84,7 +87,7 @@
                         <nav class="t199__menu">
                             <div class="t199__menu-item-wrap">
                                 <a class="t199__menu-item t-title t-menu__link-item"
-                                    href="@if (Request::segment(1) == '') #rec101938072 @else {{ route('welcome') . '/#rec101938072' }} @endif">
+                                    href="@if (Request::segment(1) == '') #rec205110593 @else {{ route('welcome') . '/#rec205110593' }} @endif">
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">Əsas Səhifə</font>
                                     </font>
@@ -107,8 +110,7 @@
                                 </a>
                             </div>
                             <div class="t199__menu-item-wrap">
-                                <a class="t199__menu-item t-title t-menu__link-item"
-                                    href="@if (Request::segment(1) == '') #rec205124679 @else {{ route('welcome') . '/#rec205124679' }} @endif">
+                                <a class="t199__menu-item t-title t-menu__link-item" href="#rec205124679">
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">Əlaqə</font>
                                     </font>
@@ -306,12 +308,14 @@
                                 <div class="t718__contacts t-text t-descr_xxxl" field="text">
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">
-                                            <a href="tel:{{ $setting->phone }}">{{ $setting->phone }}</a>
+                                            <a style="color: black !important;"
+                                                href="tel:{{ $setting->phone }}">{{ $setting->phone }}</a>
                                         </font>
                                     </font><br>
                                     <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">
-                                            <a href="mailto:{{ $setting->email }}">{{ $setting->email }}</a>
+                                            <a style="color: black !important;"
+                                                href="mailto:{{ $setting->email }}">{{ $setting->email }}</a>
                                         </font>
                                     </font>
                                 </div>
@@ -365,54 +369,48 @@
                         </div>
                     </div>
                     <div class="t-col t-col_5">
-                        <form id="form205124679" name="form205124679" role="form" action="#" method="POST"
-                            data-formactiontype="2" data-inputbox=".t-input-group"
-                            class="t-form js-form-proccess t-form_inputs-total_3"
-                            data-success-callback="t718_onSuccess">
-                            <div class="t-form__inputsbox">
-                                <div class="t-input-group t-input-group_em" data-input-lid="1496238230199">
-                                    <div class="t-input-block">
-                                        <input type="text" autocomplete="email" name="email"
-                                            class="t-input js-tilda-rule" value="" placeholder="E-poçt adresiniz"
-                                            data-tilda-rule="email" style="
+                        <div class="t-form__inputsbox">
+                            <div class="t-input-group t-input-group_nm" data-input-lid="1496238250184">
+                                <div class="t-input-block">
+                                    <input type="text" id="name" class="t-input js-tilda-rule" placeholder="Ad"
+                                        data-tilda-rule="name" style="
                                             border: 1px solid #c7c7c7;
                                             background-color: #ffffff;">
-                                        <div class="t-input-error"></div>
-                                    </div>
+                                    <div class="t-input-error"></div>
                                 </div>
-                                <div class="t-input-group t-input-group_nm" data-input-lid="1496238250184">
-                                    <div class="t-input-block">
-                                        <input type="text" autocomplete="name" name="name" class="t-input js-tilda-rule"
-                                            value="" placeholder="Ad" data-tilda-rule="name" style="
+                            </div>
+                            <div class="t-input-group t-input-group_em" data-input-lid="1496238230199">
+                                <div class="t-input-block">
+                                    <input type="text" id="email" class="t-input js-tilda-rule"
+                                        placeholder="E-poçt adresiniz" data-tilda-rule="email" style="
                                             border: 1px solid #c7c7c7;
                                             background-color: #ffffff;">
-                                        <div class="t-input-error"></div>
-                                    </div>
+                                    <div class="t-input-error"></div>
                                 </div>
-                                <div class="t-input-group t-input-group_ta" data-input-lid="1496238259342">
-                                    <div class="t-input-block">
-                                        <textarea name="textarea" class="t-input js-tilda-rule" placeholder="Mesajınız" style="border: 1px solid #c7c7c7;
+                            </div>
+                            <div class="t-input-group t-input-group_ta" data-input-lid="1496238259342">
+                                <div class="t-input-block">
+                                    <textarea id="message" class="t-input js-tilda-rule" placeholder="Mesajınız" style="border: 1px solid #c7c7c7;
                                         background-color: #ffffff;
                                         height: 102px;" rows="3"></textarea>
-                                        <div class="t-input-error"></div>
-                                    </div>
+                                    <div class="t-input-error"></div>
                                 </div>
-                                <div class="t-form__submit">
-                                    <button type="submit" class="t-submit" style="
+                            </div>
+                            <div class="t-form__submit">
+                                <button id="form_submit" type="submit" class="t-submit" style="
                                 color: #ffffff;
                                 background-color: #24dff8;
                                 border-radius: 50px;
                                 -moz-border-radius: 50px;
                                 -webkit-border-radius: 50px;">
+                                    <font style="vertical-align: inherit;">
                                         <font style="vertical-align: inherit;">
-                                            <font style="vertical-align: inherit;">
-                                                Göndər
-                                            </font>
+                                            Göndər
                                         </font>
-                                    </button>
-                                </div>
+                                    </font>
+                                </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

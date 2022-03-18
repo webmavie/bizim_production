@@ -22,7 +22,7 @@
                 @foreach ($models as $model)
                     <div class="t774__col t-col t-col_3 t-align_center t-item t774__col_mobile-grid">
                         <div class="t774__wrapper">
-                            <a href="{{ route('model', $model->slug) }}" target="_blank" rel="noopener">
+                            <a href="{{ route('model', $model->slug) }}" rel="noopener">
                                 <div class="t774__imgwrapper" style="padding-bottom:115.38461538462%;"
                                     itemtype="http://schema.org/ImageObject">
                                     <div class="t774__bgimg t-bgimg loaded" bgimgfield="li_img__1574625241664"

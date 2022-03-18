@@ -20,6 +20,7 @@ Route::controller(MainController::class)->group(function () {
     Route::get('/service/{slug}', 'Service')->name('service');
     Route::get('/models', 'Models')->name('models');
     Route::get('/model/{slug}', 'Model')->name('model');
+    Route::post('/send-mail', 'sendMail');
 });
 
 Auth::routes(['register' => false]);

@@ -9,7 +9,7 @@ class WModel extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $fillable = ['name', 'slug', 'main_image', 'image'];
+    protected $fillable = ['name', 'slug', 'main_image', 'image', 'col4'];
 
     public function images()
     {

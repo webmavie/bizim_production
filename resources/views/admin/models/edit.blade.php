@@ -70,6 +70,17 @@
                                         </span>
                                     </div>
                                 </div>
+                                <div class="col-md-12 mt-4">
+                                    <label class="col-md-12 text-center d-flex justify-content-center">
+                                        Şəkil sırala (4)&nbsp;
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" name="col4"
+                                                @if ($model->col4 == 1) checked @endif
+                                                class="custom-control-input" id="col4">
+                                            <label class="custom-control-label" for="col4"></label>
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-success float-right">Saxla</button>

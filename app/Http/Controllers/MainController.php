@@ -12,6 +12,8 @@ use App\Models\Partner;
 use App\Models\OurTeam;
 use App\Models\WModel;
 use App\Models\ModelImages;
+use Illuminate\Support\Facades\Mail;
+use Validator;
 
 class MainController extends Controller
 {
@@ -57,5 +59,31 @@ class MainController extends Controller
         !$model_exists ? abort(404) : null;
         $model = WModel::whereSlug($slug)->first();
         return view('model', compact('model'));
+    }
+
+    public function sendMail(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'message' => 'required'
+        ]);
+        // if validator fails return error json
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
+        $details = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'message' => $request->message,
+        ];
+        Mail::send('mail.index', compact('details'), function ($message) {
+            $message->to('info@bizimproduction.az');
+            $message->subject('bizimproduction.az - Contact');
+        });
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Mesajınız göndərildi'
+        ]);
     }
 }

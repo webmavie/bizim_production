@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('main_image');
             $table->string('image');
+            $table->double('col4')->default(true);
         });
     }
 

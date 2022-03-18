@@ -81,7 +81,7 @@
             data-record-type="552" data-bg-color="#eeeeee">
             <!-- t552-->
             <div class="t552">
-                <div class="t552__container t-container">
+                <div id="imgsdiv" class="t552__container t-container">
                     <script>
                         function getMeta(url, index) {
                             let img = new Image();
@@ -89,7 +89,6 @@
                             img.divid = index;
                             img.onload = function() {
                                 let imgdiv = document.getElementById(this.divid);
-                                console.log(imgdiv.offsetWidth);
                                 height = this.height * imgdiv.offsetWidth / this.width;
                                 imgdiv.style.height = height + 'px';
                             };
@@ -118,20 +117,6 @@
                 });
                 $('.t552').bind('displayChanged', function() {
                     t552_init('87760438', '1.33');
-                });
-            </script>
-
-            <script>
-                $(document).ready(function() {
-                    let maxheight = 0;
-                    $('.mimgdiv').each(function(index) {
-                        if ($(this).height() > maxheight) {
-                            maxheight = $(this).height();
-                        }
-                    });
-                    $('.mimgdiv').each(function(index) {
-                        $(this).height(maxheight);
-                    });
                 });
             </script>
         </div>
@@ -364,4 +349,17 @@
             </div>
         </div>
     @endif
+@section('js')
+    <script>
+        let maxheight = 0;
+        $('.mimgdiv').each(function(index) {
+            if ($(this).height() > maxheight) {
+                maxheight = $(this).height();
+            }
+        });
+        $('.mimgdiv').each(function(index) {
+            $(this).height(maxheight);
+        });
+    </script>
+@endsection
 @endsection

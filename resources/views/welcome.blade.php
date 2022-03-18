@@ -215,8 +215,7 @@
         </div>
     </div>
     @if ($setting->title != null)
-        <div id="rec101938072" class="r t-rec t-rec_pb_75 r_showed r_anim" style="padding-top: 30px; padding-bottom: 75px"
-            data-record-type="23">
+        <div id="rec101938072" class="r t-rec r_showed r_anim" style="padding-top: 95px;" data-record-type="23">
             <!-- T006 -->
             <div class="t006">
                 <div class="t-container">
@@ -284,7 +283,7 @@
 
     </style>
     </div>
-    <div id="rec101938074" class="r t-rec t-rec_pb_45" style="padding-top: 30px; padding-bottom: 45px"
+    <div id="rec101938074" class="r t-rec t-rec_pb_45" style="padding-top: 95px; padding-bottom: 45px"
         data-animationappear="off" data-record-type="772">
         <!-- T772 -->
         <div class="t772">
